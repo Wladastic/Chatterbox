@@ -5,17 +5,41 @@
     <title>Chatterchat</title>
 </head>
 <body>
-    <textarea name="chat_verlauf" cols="50" rows="30" disabled></textarea>
+    <textarea id="chat_verlauf"  cols="50" rows="30" disabled></textarea>
     </br>
-    <input name="message" cols="50" id="message">
+    <input name="message" cols="50" id="message_box">
     <input type="button" value="submit" id="message_send">
 
+
 <script type="application/javascript">
+$(function(){
+
+
+    $.get("/joined","Anonymous", function(result){
+        $('#chat_verlauf').val(result.join("\r"))});
 
     $("#message_send").click(function(e) {
         console.log('message sent.');
-        $.get("/message",{"message":$('#message').val() });
+        sendmessage();
+
     });
+
+    $("#message_box").keypress(function( event ) {
+        if ( event.which == 13 ) {
+            console.log("Message sent throught ENTER");
+            sendmessage();
+        }
+    });
+});
+
+    var sendmessage = function () {
+        $.get("/message",{"message":$('#message_box').val() }, function(result){
+            $('#chat_verlauf').val(result.join("\r"));
+            $('#message_box').val('');
+        });
+    };
+
+
 </script>
 </body>
 </html>
