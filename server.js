@@ -3,6 +3,9 @@ console.log('Get the server starteeeed!');
 var express = require('express');
 var app = express();
 var chat =[];
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+var ChatHistoryModel = mongoose.model('ChatHistory', { message: String });
 /**
  * @module (config)
  * @type {exports}
@@ -22,15 +25,22 @@ app.get('/joined', function(req, res){
     req.query.message;
     console.log("Anonymous joined.");
     chat.push('Anynous joined Chat.');
-    res.send(chat);
+    getmessages(res);
 });
 
 app.get('/message', function(req, res){
     req.query.message;
+    var ChatEntry= new ChatHistoryModel({message: req.query.message});
+    ChatEntry.save(console.log("Saved!"));
     console.log("Message received from Client: ", req.query.message);
-    chat.push(req.query.message);
-    res.send(chat);
+    getmessages(res);
 });
 
+var getmessages = function(res){
+    ChatHistoryModel.find({}, 'message', function (err, docs) {
+        console.log(docs);
+        res.send(docs);
+    });
+};
 
 app.listen(config.server.port);

@@ -16,7 +16,8 @@ $(function(){
 
 
     $.get("/joined","Anonymous", function(result){
-        $('#chat_verlauf').val(result.join("\r"))});
+        updatemessage(result);
+    });
 
     $("#message_send").click(function(e) {
         console.log('message sent.');
@@ -34,11 +35,19 @@ $(function(){
 
     var sendmessage = function () {
         $.get("/message",{"message":$('#message_box').val() }, function(result){
-            $('#chat_verlauf').val(result.join("\r"));
-            $('#message_box').val('');
+            updatemessage(result);
         });
+
     };
 
+    var updatemessage = function(result){
+        $('#message_box').val('');
+        for (var i = 0, length=result.length; i<length; i++ ){
+            var message= result[i].message + "\r";
+            console.log(message);
+            $('#chat_verlauf').val($('#chat_verlauf').val()+message);
+        }
+    };
 
 </script>
 </body>
