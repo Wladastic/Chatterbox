@@ -1,5 +1,5 @@
 
-console.log('Get the server starteeeed!');
+console.log('Server started!');
 var express = require('express');
 var app = express();
 var chat =[];
@@ -12,8 +12,7 @@ var ChatHistoryModel = mongoose.model('ChatHistory', { message: String });
  */
 var config = require('./private/config.js');
 
-
-console.log(config.server.port);
+console.log("Connect to localhost:"+ config.server.port);
 
 app.use(express.static('public'));
 
@@ -24,7 +23,6 @@ app.get('/', function(req,res){
 app.get('/joined', function(req, res){
     req.query.message;
     console.log("Anonymous joined.");
-    chat.push('Anynous joined Chat.');
     getmessages(res);
 });
 
@@ -38,7 +36,7 @@ app.get('/message', function(req, res){
 
 var getmessages = function(res){
     ChatHistoryModel.find({}, 'message', function (err, docs) {
-        console.log(docs);
+        //console.log(docs);
         res.send(docs);
     });
 };

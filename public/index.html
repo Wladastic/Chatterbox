@@ -7,11 +7,21 @@
 <body>
     <textarea id="chat_verlauf"  cols="50" rows="30" disabled></textarea>
     </br>
-    <input name="message" cols="50" id="message_box">
+    <input cols="50" id="message_box">
     <input type="button" value="submit" id="message_send">
 
 
 <script type="application/javascript">
+
+
+
+    function scrollpage() {
+        var textarea = document.getElementById('chat_verlauf');
+        textarea.scrollTop = textarea.scrollHeight;
+    }
+
+
+
 $(function(){
 
 
@@ -27,7 +37,7 @@ $(function(){
 
     $("#message_box").keypress(function( event ) {
         if ( event.which == 13 ) {
-            console.log("Message sent throught ENTER");
+            console.log("Message sent through ENTER");
             sendmessage();
         }
     });
@@ -43,10 +53,13 @@ $(function(){
     var updatemessage = function(result){
         $('#message_box').val('');
         for (var i = 0, length=result.length; i<length; i++ ){
-            var message= result[i].message + "\r";
-            console.log(message);
-            $('#chat_verlauf').val($('#chat_verlauf').val()+message);
+            var msg= result[i].message + "\r";
+            // console.log(msg);
+            $('#chat_verlauf').val($('#chat_verlauf').val()+msg);
         }
+        $('#chat_verlauf').val($('#chat_verlauf').val()+$('#message_box').val());
+        scrollpage();
+
     };
 
 </script>
