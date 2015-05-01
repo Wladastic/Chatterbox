@@ -6,6 +6,7 @@ var chat =[];
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var ChatHistoryModel = mongoose.model('ChatHistory', { message: String , date: String});
+var UserListModel = mongoose.model('UserList', {username: String, password: String });
 /**
  * @module (config)
  * @type {exports}
@@ -26,6 +27,18 @@ app.get('/joined', function(req, res){
     getmessages(res);
 });
 
+app.get('/register', function (req,res){
+        req.query.usernamereq;
+        UserListModel.find({}, 'username', function (err, pass) {
+            res.send("Username is available.");
+            console.log(req.query.registry);
+        });
+    }
+
+);
+
+
+
 app.get('/message', function(req, res){
     req.query.message;
     console.log("Username: " , req.query.username);
@@ -37,7 +50,7 @@ app.get('/message', function(req, res){
                 console.log("Message received from Client:",req.query.username, ":" , req.query.message /* , ChatEntry.date*/);
                 getmessages(res);
             })
-    };
+    }
 
 });
 

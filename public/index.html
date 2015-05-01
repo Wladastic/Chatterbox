@@ -5,12 +5,24 @@
     <title>Chatterchat</title>
 </head>
 <body>
+<h1> Chatterbox</h1>
+Username: <input cols="100" id="username">
+<input type="button" value="register" id="registry">
+<br>
+<br>
     <textarea id="chat_verlauf"  cols="50" rows="30" disabled></textarea>
-    </br>
-    Username: <input cols="100" id="username">
     <br>
-    <input cols="50" id="message_box">
+    <br>
+    <textarea cols="40" rows="5" id="message_box"></textarea>
     <input type="button" value="submit" id="message_send">
+    <br>
+    <br>
+
+    <br>
+    <br>
+    <br>
+    Created by Wladislav Cugunov
+
 
 
 <script type="application/javascript">
@@ -22,20 +34,33 @@
         textarea.scrollTop = textarea.scrollHeight;
     }
 
-    function checkUsername() {
-        if($('#username').val().length > 2 && ('#username').val().length < 12)
+    var checkUsername = function() {
+        if($('#username').val().length > 2 && $('#username').val().length < 12)
         {
             return true;
         }
-        else {alert("Invalid Username!");};
+        else {alert("Invalid Username!"); return false;};
+
     };
 
+    var checkMessage = function() {
+        if($('#message_box').val().length > 0 && $('#message_box').val().length < 150)  {
+            return true;
+        }
+        else {alert ("Please keep your messages above 0 and below 150 symbols.")};
+    };
 
 $(function(){
 
 
     $.get("/joined","Anonymous", function(result){
         updatemessage(result);
+    });
+
+    $("#registry").click(function(e) {
+        $.get("/register",{"usernamereq" : $('#username').val() }, function(regresult){
+            alert(regresult);
+        });
     });
 
     $("#message_send").click(function(e) {
@@ -53,7 +78,7 @@ $(function(){
 });
 
     var sendmessage = function () {
-        if(checkUsername() = true ){
+        if(checkUsername() && checkMessage()){
             $.get("/message",{"message":$('#message_box').val() , "username":$('#username').val() }, function(result){
                 updatemessage(result);
             });
