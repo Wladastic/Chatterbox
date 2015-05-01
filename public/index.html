@@ -7,6 +7,8 @@
 <body>
     <textarea id="chat_verlauf"  cols="50" rows="30" disabled></textarea>
     </br>
+    Username: <input cols="100" id="username">
+    <br>
     <input cols="50" id="message_box">
     <input type="button" value="submit" id="message_send">
 
@@ -20,6 +22,13 @@
         textarea.scrollTop = textarea.scrollHeight;
     }
 
+    function checkUsername() {
+        if($('#username').val().length > 2 && ('#username').val().length < 12)
+        {
+            return true;
+        }
+        else {alert("Invalid Username!");};
+    };
 
 
 $(function(){
@@ -44,20 +53,22 @@ $(function(){
 });
 
     var sendmessage = function () {
-        $.get("/message",{"message":$('#message_box').val() }, function(result){
-            updatemessage(result);
-        });
+        if(checkUsername() = true ){
+            $.get("/message",{"message":$('#message_box').val() , "username":$('#username').val() }, function(result){
+                updatemessage(result);
+            });
+        }
 
     };
 
     var updatemessage = function(result){
         $('#message_box').val('');
+        $('#chat_verlauf').val('');
         for (var i = 0, length=result.length; i<length; i++ ){
             var msg= result[i].message + "\r";
             // console.log(msg);
-            $('#chat_verlauf').val($('#chat_verlauf').val()+msg);
+            $('#chat_verlauf').val($('#chat_verlauf').val()+  msg);
         }
-        $('#chat_verlauf').val($('#chat_verlauf').val()+$('#message_box').val());
         scrollpage();
 
     };
