@@ -79,7 +79,8 @@ $(function(){
 
     var sendmessage = function () {
         if(checkUsername() && checkMessage()){
-            $.get("/message",{"message":$('#message_box').val() , "username":$('#username').val() }, function(result){
+            $.get("/message",{ "message":$('#message_box').val() , "username":$('#username').val() }, function(result){
+                $('#message_box').val('');
                 updatemessage(result);
             });
         }
@@ -87,16 +88,25 @@ $(function(){
     };
 
     var updatemessage = function(result){
-        $('#message_box').val('');
+        //$('#message_box').val('');  This is moved to sendmessage()
         $('#chat_verlauf').val('');
         for (var i = 0, length=result.length; i<length; i++ ){
-            var msg= result[i].message + "\r";
-            // console.log(msg);
+            var msg= result[i].date + result[i].message + "\r";
+             console.log(msg);
             $('#chat_verlauf').val($('#chat_verlauf').val()+  msg);
         }
         scrollpage();
 
     };
+
+    window.setInterval(function() {
+        $.get("/refresh","refresh", function(result){
+            updatemessage(result);
+        });
+    }, 1000);
+
+
+
 
 </script>
 </body>

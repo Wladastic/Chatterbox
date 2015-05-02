@@ -27,6 +27,11 @@ app.get('/joined', function(req, res){
     getmessages(res);
 });
 
+app.get('/refresh', function(req, res){
+    req.query.message;
+    getmessages(res);
+});
+
 app.get('/register', function (req,res){
         req.query.usernamereq;
         UserListModel.find({}, 'username', function (err, pass) {
@@ -55,7 +60,7 @@ app.get('/message', function(req, res){
 });
 
 var getmessages = function(res){
-    ChatHistoryModel.find({}, 'message', function (err, messages) {
+    ChatHistoryModel.find({}, 'message' & 'date'  , function (err, messages) {
         res.send(messages );
     });
 };
