@@ -6,9 +6,12 @@
 </head>
 <body>
 <h1> Chatterbox</h1>
-Username: <input cols="100" id="username">
-<input type="button" value="register" id="registry">
-<br>
+<div id="Login">
+    Username: <input cols="100" id="username">
+    <input type="button" value="register" id="registry">
+    <br>
+    <input type="button" value="Join" id="join">
+</div>
 <br>
     <textarea id="chat_verlauf"  cols="50" rows="30" disabled></textarea>
     <br>
@@ -44,18 +47,34 @@ Username: <input cols="100" id="username">
     };
 
     var checkMessage = function() {
-        if($('#message_box').val().length > 0 && $('#message_box').val().length < 150)  {
-            return true;
-        }
+        if($('#message_box').val().length > 0 && $('#message_box').val().length < 150)  {return true;}
         else {alert ("Please keep your messages above 0 and below 150 symbols.")};
     };
+
+var join = function() {
+    if($('#username').val()) {
+        $.get("/joined", {"usernamereq" : $('#username').val() }, function(result){
+            refresher();
+        })
+    }
+    else {
+        alert("Enter a Username, please.")
+    }
+};
 
 $(function(){
 
 
-    $.get("/joined","Anonymous", function(result){
-        updatemessage(result);
+
+    $("#join").click(function(e) {
+        join();
+
     });
+    $.get("/joined", {"usernamereq" : $('#username').val() }, function(result){
+        $('#chat_verlauf').val(result);
+    });
+
+
 
     $("#registry").click(function(e) {
         $.get("/register",{"usernamereq" : $('#username').val() }, function(regresult){
@@ -64,9 +83,15 @@ $(function(){
     });
 
     $("#message_send").click(function(e) {
-        console.log('message sent.');
+        //console.log('message sent.');
         sendmessage();
 
+    });
+
+    $("#username").keypress(function( event ) {
+        if ( event.which == 13 ) {
+            join();
+        }
     });
 
     $("#message_box").keypress(function( event ) {
@@ -91,19 +116,21 @@ $(function(){
         //$('#message_box').val('');  This is moved to sendmessage()
         $('#chat_verlauf').val('');
         for (var i = 0, length=result.length; i<length; i++ ){
-            var msg= result[i].date + result[i].message + "\r";
-             console.log(msg);
+            var msg= /* result[i].date + */ result[i].username + ": " + result[i].message + "\r";
+             //console.log(msg);
             $('#chat_verlauf').val($('#chat_verlauf').val()+  msg);
         }
         scrollpage();
 
     };
 
-    window.setInterval(function() {
-        $.get("/refresh","refresh", function(result){
-            updatemessage(result);
-        });
-    }, 1000);
+    var refresher = function() {
+                window.setInterval(function() {
+                $.get("/refresh",{"usernamereq" : $('#username').val() }, function(result){
+                    updatemessage(result);
+                });
+            }, 1000);
+            };
 
 
 

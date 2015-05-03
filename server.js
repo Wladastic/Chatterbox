@@ -5,7 +5,7 @@ var app = express();
 var chat =[];
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
-var ChatHistoryModel = mongoose.model('ChatHistory', { message: String , date: String});
+var ChatHistoryModel = mongoose.model('ChatHistory', {username: String , message: String , date: Date});
 var UserListModel = mongoose.model('UserList', {username: String, password: String });
 /**
  * @module (config)
@@ -13,23 +13,37 @@ var UserListModel = mongoose.model('UserList', {username: String, password: Stri
  */
 var config = require('./private/config.js');
 
-console.log("Connect to localhost:"+ config.server.port);
+console.log('Server running at "localhost:'+ config.server.port+'"');
 
 app.use(express.static('public'));
 
 app.get('/', function(req,res){
-    res.send(chat);
+
     });
 
 app.get('/joined', function(req, res){
-    req.query.message;
-    console.log("Anonymous joined.");
-    getmessages(res);
+    console.log(req.query.usernamereq + ' requested.');
+    if(req.query.usernamereq.length) {
+
+        var ChatEntry= new ChatHistoryModel({username: 'Server' ,message: req.query.usernamereq + " joined.", date: new Date().getHours()  });
+        ChatEntry.save(function (err, saved) {
+            if(err) return console.error(err);
+            console.log( req.query.usernamereq + " joined.");
+            getmessages(res);
+        })
+
+    }
+    else {
+        res.send('Server: Please enter a Username and hit "Join"');
+    }
+
 });
 
 app.get('/refresh', function(req, res){
-    req.query.message;
+    if(req.query.usernamereq.length){
     getmessages(res);
+    }
+    else{res.send('Server: Please enter a Username and hit "Join"');}
 });
 
 app.get('/register', function (req,res){
@@ -49,10 +63,10 @@ app.get('/message', function(req, res){
     console.log("Username: " , req.query.username);
     if (req.query.username === false ) { console.log("Please Enter a Username!")}
     else {
-        var ChatEntry= new ChatHistoryModel({message: "[" + new Date().getHours()+ ":" + new Date().getMinutes()+ "]"+ req.query.username + ": " + req.query.message, date: new Date() });
+        var ChatEntry= new ChatHistoryModel({message: req.query.message, username:req.query.username  , date: new Date() });
             ChatEntry.save(function (err, saved) {
                 if(err) return console.error(err);
-                console.log("Message received from Client:",req.query.username, ":" , req.query.message /* , ChatEntry.date*/);
+                console.log("Message received from Client->",req.query.username, ":" , req.query.message );
                 getmessages(res);
             })
     }
@@ -60,8 +74,8 @@ app.get('/message', function(req, res){
 });
 
 var getmessages = function(res){
-    ChatHistoryModel.find({}, 'message' & 'date'  , function (err, messages) {
-        res.send(messages );
+    ChatHistoryModel.find({}, 'message' & 'date' &'username' , function (err, messages) {
+        res.send(messages);
     });
 };
 
