@@ -4,26 +4,56 @@
 <head>
     <title>Chatterchat</title>
 </head>
-<body>
+<body style="background-color: lightgray; color: black">
 <h1> Chatterbox</h1>
 <div id="Login">
     Username: <input cols="100" id="username">
-    <input type="button" value="register" id="registry">
+        <div style="visibility: hidden">Password:  <input type="password" value="" id="password"> </div>
+    <input type="button" value="Logout" id="logout">
     <br>
-    <input type="button" value="Join" id="join">
+    Press "Enter" to <input type="button" value="Join" id="join">
+    or press to  <input type="button" value="register" id="registry"> a new Username.
 </div>
 <br>
-    <textarea id="chat_verlauf"  cols="50" rows="30" disabled></textarea>
+<table>
+<tr>
+    <td>
+    <textarea id="chat_verlauf"  cols="40" rows="30" style="background-color: dimgrey; color: goldenrod;" disabled></textarea>
     <br>
+    <textarea cols="40" rows="4" id="message_box"></textarea>
+    <input type="button" value="Submit" id="message_send" style="position:relative; top: 0px">
     <br>
-    <textarea cols="40" rows="5" id="message_box"></textarea>
-    <input type="button" value="submit" id="message_send">
+    </td>
+    <td>
+    <div>
+        Users Online:
+        <br>
+        <textarea id="Online_Users" rows="20" style="color: lightgreen; background-color: dimgrey ;" disabled></textarea>
+        <br>
+        <input type="button" id="open_private_chat"  value="Open private Chat">
+    </div>
+    </td>
+    <td>
+        <div style="visibility: hidden"  id="private_chat">
+                <br>
+                Private Chat with: <textarea id="username_private_chat" rows="1" disabled></textarea>
+                <br>
+                <input type="button" value="Close Chat" style="width: 270px" id="close_private_chat">
+                <br>
+                <textarea id="chat_verlauf_private"   cols="40"  rows="28" style=" background-color: #bbbbbb;" disabled></textarea>
+                <br>
+                <textarea cols="40" rows="5" id="message_box_private"></textarea>
+                <input type="button" value="submit" id="message_send_private">
+        </div>
+     </td>
+
+</tr>
+</table>
+<br>
     <br>
     <br>
 
-    <br>
-    <br>
-    <br>
+
     Created by Wladislav Cugunov
 
 
@@ -68,12 +98,20 @@ $(function(){
 
     $("#join").click(function(e) {
         join();
-
     });
+
     $.get("/joined", {"usernamereq" : $('#username').val() }, function(result){
         $('#chat_verlauf').val(result);
     });
 
+
+    $("#open_private_chat").click(function(e) {
+            $('#private_chat').css({visibility: "visible"});
+    });
+
+    $("#close_private_chat").click(function(e) {
+        $('#private_chat').css({visibility: "hidden"});
+    });
 
 
     $("#registry").click(function(e) {
@@ -83,9 +121,7 @@ $(function(){
     });
 
     $("#message_send").click(function(e) {
-        //console.log('message sent.');
         sendmessage();
-
     });
 
     $("#username").keypress(function( event ) {
@@ -109,26 +145,32 @@ $(function(){
                 updatemessage(result);
             });
         }
-
     };
 
     var updatemessage = function(result){
-        //$('#message_box').val('');  This is moved to sendmessage()
         $('#chat_verlauf').val('');
         for (var i = 0, length=result.length; i<length; i++ ){
-            var msg= /* result[i].date + */ result[i].username + ": " + result[i].message + "\r";
-             //console.log(msg);
+            var msg= result[i].clienttime  + result[i].username + result[i].message + "\r";
             $('#chat_verlauf').val($('#chat_verlauf').val()+  msg);
         }
         scrollpage();
-
     };
+
 
     var refresher = function() {
                 window.setInterval(function() {
                 $.get("/refresh",{"usernamereq" : $('#username').val() }, function(result){
                     updatemessage(result);
                 });
+                $.get("/usersonline",{"usernamereq" : $('#username').val() }, function(OnlineUsers){
+                        // Enter code here;
+                        $('#Online_Users').val('');
+                        for (var i = 0, length=OnlineUsers.length; i<length; i++ ){
+                            var OnlineUserloop= OnlineUsers[i];
+
+                            $('#Online_Users').val($('#Online_Users').val()+ OnlineUserloop + "\r");
+                        }
+                    });
             }, 1000);
             };
 
