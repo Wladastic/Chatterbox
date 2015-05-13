@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/html">
+<script src="jquery-2.1.3.min.js"></script>
+<head>
+    <title>Test of a game.</title>
+</head>
+<body>
+
+<div>
+
+    <iframe width="400" height="300" style="background-color:lightblue;" >
+
+
+
+    </iframe>
+    <textarea id="gamer" cols="1" rows="2" style="position: relative; left: 0px" disabled></textarea >
+    <input type="button" id="button" value="Back" href="/index.html">
+</div>
+</body>
+
+<script>
+    $(function(){
+
+var gamerpos = -400;
+    var refresher = function() {
+        window.setInterval(function() {
+            $('gamer').css({left: -400});
+            gamerpos -= 20;
+        }, 1000);};
+
+refresher();
+    });
+
+</script>
+
+</html>
