@@ -21,6 +21,10 @@ var checkUser = function(UsernametoTest) {
             if ( OnlineUsers[i] == UsernametoTest ){ return true;}
         }
         OnlineUsers[OnlineUsers.length] = UsernametoTest;
+            /* if(new Date().getMinutes % 2 == 0){
+             OnlineUsers = [];
+             };
+             *  */
 };
 
 console.log('Server running at "localhost:'+ config.server.port+'"');
@@ -45,7 +49,6 @@ app.get('/joined', function(req, res){
     else {
         res.send('Server: Please enter a Username and hit "Join"');
     }
-
 });
 
 app.get('/usersonline', function(req, res){
@@ -74,12 +77,6 @@ app.get('/register', function (req,res){
 );
 
 
-//  Listen for Usernames and add to array that checks every 10 seconds, if each user is still online.
-//  Add function that calls the variable and adds {is_online : yes} to each user, then enters it
-//  into it's username array in the mongodb
-
-
-
 app.get('/message', function(req, res){
     //req.query.message;
     console.log("Username: " , req.query.username);
@@ -101,5 +98,6 @@ var getmessages = function(res){
     });
 };
 
+setInterval(function(){ OnlineUsers = []; }, 5000);
 
 app.listen(config.server.port);
