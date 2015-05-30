@@ -128,11 +128,12 @@ $(function() {
         sendmessage();
     });
 
+    /*   THis is obsolete now
     $("#username").keypress(function( event ) {
         if ( event.which == 13 ) {
             join();
         }
-    });
+    });  */
 
     $("#message_box").keypress(function( event ) {
         if ( event.which == 13 ) {
@@ -153,7 +154,7 @@ $(function() {
     var updatemessage = function(result){
         $('#chat_verlauf').val('');
         for (var i = 0, length=result.length; i<length; i++ ){
-            var msg= result[i].clienttime + " " + result[i].username +" "+ result[i].message + "\r";
+            var msg= result[i].clienttime + ": " + result[i].username +" : "+ result[i].message + "\r";
             $('#chat_verlauf').val($('#chat_verlauf').val()+  msg);
         }
         scrollpage();
@@ -176,9 +177,13 @@ $(function() {
             });
         }, 1000);
     };
+    var promptuser = function() {
+        $('#username').val(prompt("Please type your desired username."));
+        refresher();
+    };
 
-    $('#username').val(prompt("Please type your desired username."));
 
+    promptuser();
 
 });
 
