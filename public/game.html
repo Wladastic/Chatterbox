@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <script src="jquery-2.1.3.min.js"></script>
 <head>
     <title>Coinrush</title>
@@ -12,58 +12,61 @@
     <textarea id="Coin_Mine"> Coin Mine </textarea>
     <input type="button" id="Mine_click" value="Mine!">
 <br>
-    <textarea id="Mines">Mine</textarea> <input type="button" id="Mine_Buy" value="Buy Mine"> Cost: 20 Coins.
+    <textarea id="Mines">Mine</textarea> <input type="button" id="Mine_Buy" value="Buy Mine"> <textarea id="MineCost"></textarea>
 <br>
-    <textarea id="Super_Mario">Super Mario</textarea> <input type="button" id="Super_Mario_Buy" value="Buy Super Mario"> Cost: 100 Coins.
+    <textarea id="Super_Mario">Super Mario</textarea> <input type="button" id="Super_Mario_Buy" value="Buy Super Mario"> <textarea id="SuperMarioCost"> </textarea>
 <br>
     <textarea id="Coins"> No Coins yet! </textarea>
 <br>
-    <input type="button" value="Back" href="/public/index.html">
 </div>
 </body>
 
 <script>
     $(function(){
         var Earn_Click = 1;
-        var Coins = 0;
-        var Mine_Collect = 1;
-        var Mine_Cost = 10;
-        var Mine_Count = 0;
-        var Super_Mario_Collect = 10;
-        var Super_Mario_Cost = 100;
-        var Super_Mario_Count = 0;
+            Coins = 0;
+            Mine_Collect = 1;
+            Mine_Cost = 10;
+            Mine_Count = 0;
+            Super_Mario_Collect = 10;
+            Super_Mario_Cost = 100;
+            Super_Mario_Count = 0;
+            gain= 0;
 
-        var gain= 0;
     var refresher = function() {
         window.setInterval(function() {
             gain = Mine_Collect * Mine_Count + Super_Mario_Collect * Super_Mario_Count;
-            Coins= Coins + gain;
+            Coins = Coins + gain;
             $('#Coins').val("Coins: " + Coins);
-
+            $('#MineCost').val("Cost: " + Mine_Cost);
+            $('#SuperMarioCost').val("Cost: " + Super_Mario_Cost);
         }, 1000);};
 
-        $("#Super_Mario_Buy").click(function(e) {
-            if( Coins > Super_Mario_Cost) {
-                Super_Mario_Count = Super_Mario_Count + 1;
-                Coins = Coins - Super_Mario_Cost;
-                $('#Super_Mario').val("Super Marios: " + Super_Mario_Count);
-            }
-            else { alert("Not enough Coins!")};
+        $("#Mine_click").click(function(e) {
+            Coins = Coins + Earn_Click;
         });
+
 
         $("#Mine_Buy").click(function(e) {
             if( Coins > Mine_Cost) {
                 Mine_Count = Mine_Count + 1;
                 Coins = Coins - Mine_Cost;
                 $('#Mines').val("Mines: " + Mine_Count);
+                Mine_Cost = Mine_Cost * 1.2;
             }
             else { alert("Not enough Coins!")};
         });
 
-
-        $("#Mine_click").click(function(e) {
-            Coins = Coins + Earn_Click;
+        $("#Super_Mario_Buy").click(function(e) {
+            if( Coins > Super_Mario_Cost) {
+                Super_Mario_Count = Super_Mario_Count + 1;
+                Coins = Coins - Super_Mario_Cost;
+                $('#Super_Mario').val("Super Marios: " + Super_Mario_Count);
+                Super_Mario_Cost = Super_Mario_Cost * 1.2;
+            }
+            else { alert("Not enough Coins!")};
         });
+
 
 
 
