@@ -12,13 +12,11 @@
 <h1> Chatterbox</h1>
 
 <div id="Login">
-    Username: <input cols="100" id="username" disabled>
-        <a id="username_blank"></a>
-        <div style="visibility: hidden">Password:  <input type="password" value="" id="password"> </div>
-    <input type="button" value="Logout" id="logout">
+    Username: <input cols="100" id="username" disabled> <input type="button" value="Enter Username" id="enterUsername">
+    <form href="javascript:history.go(0)"> <input type="submit" value="Logout"></form>
+
+
     <br>
-    Press "Enter" to <input type="button" value="Join" id="join">
-    or press to  <input type="button" value="register" id="registry"> a new Username.
 </div>
 
 <br>
@@ -122,6 +120,9 @@ $(function() {
         $('#chat_verlauf').val(result);
     });
 
+    $("#enterUsername").click(function(e){
+       promptuser();
+    });
 
     $("#open_private_chat").click(function(e) {
             $('#private_chat').css({visibility: "visible"});
