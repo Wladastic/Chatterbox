@@ -85,7 +85,8 @@ app.get('/message', function(req, res){
             ChatEntry.save(function (err, saved) {
                 if(err) return console.error(err);
                 console.log("Message received from Client->",req.query.username, ":" , req.query.message );
-                                   /* if ( (req.query.message).indexOf('Jarvis') >= 0) {
+                                   /*  *** PLEASE FIND OUT WHY NOT SAVING  ***
+                                    if ( (req.query.message).indexOf('Jarvis') >= 0) {
                                         var ChatEntryJarv= new ChatHistoryModel({username: 'Jarvis' , message:  "Yes?" , clienttime: new Date().getHours()+ ":" + new Date().getMinutes()  });
                                         ChatEntryJarv.save(function(err, saved){if(err) return console.error(err); console.log("Jarvis has responded to user.")});
                                     } */
