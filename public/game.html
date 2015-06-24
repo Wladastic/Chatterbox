@@ -52,7 +52,7 @@
                 Mine_Count = Mine_Count + 1;
                 Coins = Coins - Mine_Cost;
                 $('#Mines').val("Mines: " + Mine_Count);
-                Mine_Cost = Mine_Cost * 1.2;
+                Mine_Cost = Math.round(Mine_Cost * 1.2);
             }
             else { alert("Not enough Coins!")};
         });
@@ -62,7 +62,7 @@
                 Super_Mario_Count = Super_Mario_Count + 1;
                 Coins = Coins - Super_Mario_Cost;
                 $('#Super_Mario').val("Super Marios: " + Super_Mario_Count);
-                Super_Mario_Cost = Super_Mario_Cost * 1.2;
+                Super_Mario_Cost = Math.round(Super_Mario_Cost * 1.2);
             }
             else { alert("Not enough Coins!")};
         });

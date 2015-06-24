@@ -177,22 +177,26 @@ $(function() {
 
     var refresher = function() {
         window.setInterval(function() {
-            $.get("/refresh",{"usernamereq" : $('#username').val() }, function(result){
-                updatemessage(result);
-            });
-            $.get("/usersonline",{"usernamereq" : $('#username').val() }, function(OnlineUsers){
-                // Enter code here;
-                $('#Online_Users').val('');
-                var OnlineUserCount= 0;
-                for (var i = 0, length=OnlineUsers.length; i<length; i++ ){
-                    var OnlineUserloop= OnlineUsers[i];
+            if ( $('#username').val()== "") { $('#chat_verlauf').val('Please Enter a Username by Clicking on "Enter Username".');}
 
-                        OnlineUserCount = OnlineUserCount + 1;
+            else {
+                        $.get("/refresh",{"usernamereq" : $('#username').val() }, function(result){
+                            updatemessage(result);
+                        });
+                        $.get("/usersonline",{"usernamereq" : $('#username').val() }, function(OnlineUsers){
+                            // Enter code here;
+                            $('#Online_Users').val('');
+                            var OnlineUserCount= 0;
+                            for (var i = 0, length=OnlineUsers.length; i<length; i++ ){
+                                var OnlineUserloop= OnlineUsers[i];
 
-                    $('#Online_Users').val($('#Online_Users').val()+ OnlineUserloop + "\r");
+                                    OnlineUserCount = OnlineUserCount + 1;
+
+                                $('#Online_Users').val($('#Online_Users').val()+ OnlineUserloop + "\r");
+                            }
+                            $.get('#Users_Online_Counter').val("Online Users: " + OnlineUserCount);
+                        });
                 }
-                $.get('#Users_Online_Counter').val("Online Users: " + OnlineUserCount);
-            });
         }, 1000);
     };
     var promptuser = function() {

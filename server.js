@@ -1,4 +1,3 @@
-
 console.log('Server started!');
 var express = require('express');
 var app = express();
@@ -82,10 +81,14 @@ app.get('/message', function(req, res){
     console.log("Username: " , req.query.username);
     if (req.query.username === false ) { console.log("Please Enter a Username!")}
     else {
-        var ChatEntry= new ChatHistoryModel({message: req.query.message, username:req.query.username  , clienttime: new Date().getHours() + ":" + new Date().getMinutes() });
+        var ChatEntry = new ChatHistoryModel({message: req.query.message, username:req.query.username  , clienttime: new Date().getHours() + ":" + new Date().getMinutes() });
             ChatEntry.save(function (err, saved) {
                 if(err) return console.error(err);
                 console.log("Message received from Client->",req.query.username, ":" , req.query.message );
+                                   /* if ( (req.query.message).indexOf('Jarvis') >= 0) {
+                                        var ChatEntryJarv= new ChatHistoryModel({username: 'Jarvis' , message:  "Yes?" , clienttime: new Date().getHours()+ ":" + new Date().getMinutes()  });
+                                        ChatEntryJarv.save(function(err, saved){if(err) return console.error(err); console.log("Jarvis has responded to user.")});
+                                    } */
                 getmessages(res);
             })
     }
