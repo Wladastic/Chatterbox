@@ -1,5 +1,4 @@
 # Chatterbox
 Creating a Chat-Service (Still under dev)
 
-This is the prototype of a soon to be Chat-Service I am about to develop.
-Feel free to watch the progress.
+This is some old project I started back in 2015 when my mentor showed me how to build stuff with node.js
