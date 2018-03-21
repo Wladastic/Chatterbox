@@ -34,6 +34,9 @@ app.get('/', function(req,res){
 
     });
 
+
+//TODO: add login and token verification
+//TODO: 
 app.get('/joined', function(req, res){
     console.log('Join requested by unidentified Client');
     if(req.query.usernamereq.length) {
@@ -76,6 +79,7 @@ app.get('/register', function (req,res){
 );
 
 
+// TODO: add parameter to who the message is supposed to be sent, then later work with tokens
 app.get('/message', function(req, res){
     //req.query.message;
     console.log("Username: " , req.query.username);
@@ -96,6 +100,8 @@ app.get('/message', function(req, res){
 
 });
 
+
+// TODO: create getmessagesFrom method that returns messages that have been received from specific user
 var getmessages = function(res){
     ChatHistoryModel.find({}, 'message' & 'clienttime'  &'username' , function (err, messages) {
         res.send(messages);
