@@ -13,7 +13,8 @@
 
 <div id="Login">
     Username: <input cols="100" id="username" disabled> <input type="button" value="Enter Username" id="enterUsername">
-    <form href="javascript:history.go(0)"> <input type="submit" value="Logout"></form>
+
+    <form href="javascript:history.go(0)"><input type="submit" value="Logout"></form>
 
 
     <br>
@@ -26,50 +27,53 @@
     <tr>
 
         <td>
-        <textarea id="chat_verlauf"  cols="40" rows="30" style="background-color: dimgrey; color: goldenrod;" disabled></textarea>
-        <br>
-        <textarea cols="40" rows="4" id="message_box"></textarea>
-        <input type="button" value="Submit" id="message_send" style="position:relative; top: 0px">
-        <br>
+            <textarea id="chat_verlauf" cols="40" rows="30" style="background-color: dimgrey; color: goldenrod;"
+                      disabled></textarea>
+            <br>
+            <textarea cols="40" rows="4" id="message_box"></textarea>
+            <input type="button" value="Submit" id="message_send" style="position:relative; top: 0px">
+            <br>
         </td>
 
 
-            <td>
+        <td>
             <div>
                 <textarea id="Users_Online_Counter"></textarea>
                 <br>
-                <textarea id="Online_Users" rows="30" style="color: lightgreen; background-color: dimgrey ;" disabled></textarea>
+                <textarea id="Online_Users" rows="30" style="color: lightgreen; background-color: dimgrey ;"
+                          disabled></textarea>
                 <br>
                 <input type="button" id="open_private_chat" value="Open private Chat">
                 <br><br><br><br><br>
 
             </div>
-            </td>
+        </td>
 
-    <td>
+        <td>
 
-        <div style="visibility: hidden"  id="private_chat">
+            <div style="visibility: hidden" id="private_chat">
                 <br>
-                Private Chat with: <textarea id="username_private_chat" rows="1" ></textarea>
+                Private Chat with: <textarea id="username_private_chat" rows="1"></textarea>
                 <br>
                 <input type="button" value="Close Chat" style="width: 270px" id="close_private_chat">
                 <br>
-                <textarea id="chat_verlauf_private"   cols="40"  rows="28" style=" background-color: #bbbbbb;" disabled></textarea>
+                <textarea id="chat_verlauf_private" cols="40" rows="28" style=" background-color: #bbbbbb;"
+                          disabled></textarea>
                 <br>
                 <textarea cols="40" rows="5" id="message_box_private"></textarea>
                 <input type="button" value="submit" id="message_send_private">
 
-        </div>
+            </div>
 
-     </td>
+        </td>
 
 
-</tr>
+    </tr>
 </table>
 <br>
 
 
-    Created by Wladislav Cugunov
+Created by Wladislav Cugunov
 <br>
 <a href="/game.html"> Test my new game </a>
 
@@ -77,131 +81,137 @@
 <script type="application/javascript">
 
 
-
     function scrollpage() {
         var textarea = document.getElementById('chat_verlauf');
         textarea.scrollTop = textarea.scrollHeight;
     }
 
-    var checkUsername = function() {
-        if($('#username').val().length > 2 && $('#username').val().length < 12)
-        {
+    var checkUsername = function () {
+        if ($('#username').val().length > 2 && $('#username').val().length < 12) {
             return true;
         }
-        else {alert("Invalid Username!"); return false;};
+        else {
+            alert("Invalid Username!");
+            return false;
+        }
 
     };
 
-    var checkMessage = function() {
-        if($('#message_box').val().length > 0 && $('#message_box').val().length < 150)  {return true;}
-        else {alert ("Please keep your messages above 0 and below 150 symbols.")};
+    var checkMessage = function () {
+        if ($('#message_box').val().length > 0 && $('#message_box').val().length < 150) {
+            return true;
+        }
+        else {
+            alert("Please keep your messages above 0 and below 150 symbols.")
+        }
     };
 
-var join = function() {
-    if($('#username').val()) {
-        $.get("/joined", {"usernamereq" : $('#username').val() }, function(result){
-            refresher();
-        })
-    }
-    else {
-        alert("Enter a Username, please.")
-    }
-};
+    var join = function () {
+        if ($('#username').val()) {
+            $.get("/joined", {"usernamereq": $('#username').val() }, function (result) {
+                refresher();
+            })
+        }
+        else {
+            alert("Enter a Username, please.")
+        }
+    };
 
-$(function() {
-
-
-
-    $("#join").click(function(e) {
-        join();
-    });
-
-    $.get("/joined", {"usernamereq" : $('#username').val() }, function(result){
-        $('#chat_verlauf').val(result);
-    });
-
-    $("#enterUsername").click(function(e){
-       promptuser();
-    });
-
-    $("#open_private_chat").click(function(e) {
-            $('#private_chat').css({visibility: "visible"});
-    });
-
-    $("#close_private_chat").click(function(e) {
-        $('#private_chat').css({visibility: "hidden"});
-    });
+    $(function () {
 
 
-    $("#registry").click(function(e) {
-        $.get("/register",{"usernamereq" : $('#username').val() }, function(regresult){
-            alert(regresult);
+        $("#join").click(function (e) {
+            join();
         });
-    });
 
-    $("#message_send").click(function(e) {
-        sendmessage();
-    });
+        $.get("/joined", {"usernamereq": $('#username').val() }, function (result) {
+            $('#chat_verlauf').val(result);
+        });
+
+        $("#enterUsername").click(function (e) {
+            promptuser();
+        });
+
+        $("#open_private_chat").click(function (e) {
+            $('#private_chat').css({visibility: "visible"});
+        });
+
+        $("#close_private_chat").click(function (e) {
+            $('#private_chat').css({visibility: "hidden"});
+        });
 
 
-    $("#message_box").keypress(function( event ) {
-        if ( event.which == 13 ) {
-            console.log("Message sent through ENTER");
-            sendmessage();
-        }
-    });
-
-    var sendmessage = function () {
-        if(checkUsername() && checkMessage()){
-            $.get("/message",{ "message":$('#message_box').val() , "username":$('#username').val() }, function(result){
-                $('#message_box').val('');
-                updatemessage(result);
+        $("#registry").click(function (e) {
+            $.get("/register", {"usernamereq": $('#username').val() }, function (regresult) {
+                alert(regresult);
             });
-        }
-    };
+        });
 
-    var updatemessage = function(result){
-        $('#chat_verlauf').val('');
-        for (var i = 0, length=result.length; i<length; i++ ){
-            var msg= result[i].clienttime + ": " + result[i].username +" : "+ result[i].message + "\r";
-            $('#chat_verlauf').val($('#chat_verlauf').val()+  msg);
-        }
-        scrollpage();
-    };
+        $("#message_send").click(function (e) {
+            sendmessage();
+        });
 
 
-    var refresher = function() {
-        window.setInterval(function() {
-            if ( $('#username').val()== "") { $('#chat_verlauf').val('Please Enter a Username by Clicking on "Enter Username".');}
+        $("#message_box").keypress(function (event) {
+            if (event.which == 13) {
+                console.log("Message sent through ENTER");
+                sendmessage();
+            }
+        });
 
-            else {
-                        $.get("/refresh",{"usernamereq" : $('#username').val() }, function(result){
-                            updatemessage(result);
-                        });
-                        $.get("/usersonline",{"usernamereq" : $('#username').val() }, function(OnlineUsers){
-                            // Enter code here;
-                            $('#Online_Users').val('');
-                            var OnlineUserCount= 0;
-                            for (var i = 0, length=OnlineUsers.length; i<length; i++ ){
-                                var OnlineUserloop= OnlineUsers[i];
+        var sendmessage = function () {
+            if (checkUsername() && checkMessage()) {
+                $.get("/message", { "message": $('#message_box').val(), "username": $('#username').val() }, function (result) {
+                    $('#message_box').val('');
+                    updatemessage(result);
+                });
+            }
+        };
 
-                                    OnlineUserCount = OnlineUserCount + 1;
+        var updatemessage = function (result) {
+            $('#chat_verlauf').val('');
+            for (var i = 0, length = result.length; i < length; i++) {
+                var msg = result[i].clienttime + ": " + result[i].username + " : " + result[i].message + "\r";
+                $('#chat_verlauf').val($('#chat_verlauf').val() + msg);
+            }
+            scrollpage();
+        };
 
-                                $('#Online_Users').val($('#Online_Users').val()+ OnlineUserloop + "\r");
-                            }
-                            $.get('#Users_Online_Counter').val("Online Users: " + OnlineUserCount);
-                        });
+
+        var refresher = function () {
+            window.setInterval(function () {
+                if ($('#username').val() == "") {
+                    $('#chat_verlauf').val('Please Enter a Username by Clicking on "Enter Username".');
                 }
-        }, 1000);
-    };
-    var promptuser = function() {
-        $('#username').val(prompt("Please type your desired username."));
-        refresher();
-    };
 
-    promptuser();
+                else {
+                    $.get("/refresh", {"usernamereq": $('#username').val() }, function (result) {
+                        updatemessage(result);
+                    });
+                    $.get("/usersonline", {"usernamereq": $('#username').val() }, function (OnlineUsers) {
+                        // Enter code here;
+                        $('#Online_Users').val('');
+                        var OnlineUserCount = 0;
+                        for (var i = 0, length = OnlineUsers.length; i < length; i++) {
+                            var OnlineUserloop = OnlineUsers[i];
 
-});
+                            OnlineUserCount = OnlineUserCount + 1;
+
+                            $('#Online_Users').val($('#Online_Users').val() + OnlineUserloop + "\r");
+                        }
+                        $.get('#Users_Online_Counter').val("Online Users: " + OnlineUserCount);
+                    });
+                }
+            }, 1000);
+        };
+        var promptuser = function () {
+            $('#username').val(prompt("Please type your desired username."));
+            refresher();
+        };
+
+        promptuser();
+
+    });
 
 
 </script>
